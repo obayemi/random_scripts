@@ -1,0 +1,16 @@
+#!/bin/bash
+
+WALLP_AV="${HOME}/images/wallpapers-available/"
+WALLP="${HOME}/images/wallpapers/"
+
+
+function main {
+    if [ "$#" -gt 1 ] ; then
+         ln -s ${WALLP_AV}/$1 ${WALLP}/$2
+         return $?
+    fi
+    return 0
+}
+
+main $@
+exit $?

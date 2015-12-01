@@ -1,0 +1,36 @@
+#!/bin/bash
+# by obayemi
+
+SERVER='ikjpz.com'
+SERVER_PATH='/srv/http/ninja/'
+SERVER_URL="http://ikjpz.ninja/"
+
+SOUND_NOTIF='/usr/share/sounds/freedesktop/stereo/complete.oga'
+
+TMPFILE="${RANDOM}.png"
+
+SCREENSHOT_PGRM="`which gnome-screenshot`"
+AREA_OPTS=""
+
+
+function capture {
+  $SCREENSHOT_PGRM -f /tmp/${TMPFILE} $1 &> /dev/null
+}
+
+function transmit {
+  scp $1 ${SERVER}:${SERVER_PATH}/
+  local fileurl=${SERVER_URL}`basename $1`
+
+  echo $fileurl
+  notify-send $fileurl
+  xsel -ip <<< $fileurl
+  xsel -ib <<< $fileurl
+  mplayer $SOUND_NOTIF
+}
+
+function main {
+  capture $1
+  transmit /tmp/${TMPFILE}
+}
+
+main $1
