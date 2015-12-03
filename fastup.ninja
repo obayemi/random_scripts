@@ -1,0 +1,22 @@
+#!/bin/bash
+# by obayemi
+
+SERVER='ikjpz.com'
+SERVER_PATH='/srv/http/ninja/'
+SERVER_URL="http://ikjpz.ninja/"
+HTTPD_USER=http
+
+SOUND_NOTIF='/usr/share/sounds/freedesktop/stereo/complete.oga'
+
+function main {
+  tar -c $@ | ssh ${SERVER} tar -xvC ${SERVER_PATH}/ --owner http
+
+  local fileurl=${SERVER_URL}`basename $1`
+
+  echo $fileurl
+  notify-send $fileurl
+  xsel -ip <<< $fileurl
+  xsel -ib <<< $fileurl
+}
+
+main $@
